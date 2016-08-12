@@ -10,7 +10,7 @@
             <div class="page-content-side-menu ">
                 <a target="main" href="/supplier/activity/">系统参数</a>
                 <a target="main"
-                   href="/supplier/activity/">用户管理</a> <a
+                   href="/manage/system/user/">用户管理</a> <a
                         target="main" href="/supplier/activity/">权限角色</a>
             </div>
         </div>
@@ -22,10 +22,10 @@
             </div>
         </div>
         <div class="games submenu">
-            <div class="page-content-side-nav">游戏项目</div>
+            <div class="page-content-side-nav">疯狂牛牛</div>
             <div class="page-content-side-menu ">
-                <a target="main" href="/manage/games/nui/">疯狂牛牛</a>
-                <a target="main" href="/supplier/operator/control/airways/">四川麻将</a>
+                <a target="main" href="/manage/games/fknn/">玩家管理</a>
+                <a target="main" href="/supplier/operator/control/airways/">牌桌管理</a>
             </div>
         </div>
         <div class="finance submenu">

@@ -31,7 +31,6 @@ class UserController extends BaseController
             $enterprise = Enterprise::find($eid);
             $users = User::where('eid', $enterprise->id)->orderBy('created_at', 'desc')->paginate($this->pageSize);
         }
-
         return view('manage.system.user.index', ['model' => 'system', 'menu' => 'user', 'enterprise' => $enterprise, 'users' => $users]);
     }
 

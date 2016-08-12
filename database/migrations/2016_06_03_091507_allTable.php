@@ -211,6 +211,145 @@ class AllTable extends Migration
             });
 
         }
+
+        //玩家基本信息表
+        if(!Schema::hasTable('playerinfo')){
+            Schema::create('playerinfo',function (Blueprint $table){
+                $table->increments('id'); //自增 主键ID
+                $table->string('nickName',50);//昵称
+                $table->string('realName',50); //真实姓名
+                $table->string('phone',50); //手机号码
+                $table->string('wechatId'); //微信登陆ID
+                $table->integer('status'); //状态1 在线 2 离线
+                $table->string('deskNum')->nullable(); //所在桌号,创建房间后生成
+                $table->integer('autoBet')->default(0);//是否自动下注 0否(默认) 1 是
+                $table->dateTime('createTime'); //创建时间
+                $table->string('lastLoginIp',50);// 最后登陆IP地址
+                $table->dateTime('lastLoginTime'); //最后登陆时间
+                $table->integer('playerType');//账户类型  0 系统账户  1 代理商  2 普通玩家
+                $table->integer('parentId');//所属上级用户ID
+                $table->timestamps();
+            });
+        }
+
+        /*
+         * 开桌信息表
+         * */
+        if (!Schema::hasTable('deskinfo')){
+            Schema::create('deskinfo',function (Blueprint $table){
+               $table->increments('id'); //自增主键ID
+                $table->string('number',20); //桌号
+                $table->integer('type'); //桌类型 1 公共 2私有
+                $table->string('password',50); //密码
+                $table->integer('qzScore')->default(0); //抢庄最低分数
+                $table->integer('qzWaitTime')->default(10); //抢庄等待时间,默认10秒
+                $table->integer('kjWaitTime')->default(10); //开局等待时间,默认10秒
+                $table->integer('kjLowMans')->default(2); //开局最低人数,默认2人
+                $table->integer('status'); //当前桌的状态 1 进行中,2已结束
+                $table->integer('createPlayerId');// 创建玩家ID
+                $table->integer('dealerId')->nullable(); //本桌庄家ID
+                $table->integer('autoQz')->default(0); //是否自动抢庄 0 否 1 是
+                $table->timestamps();
+            });
+        }
+
+        /*
+         * 开局信息表
+         * */
+        if (!Schema::hasTable('matchinfo')){
+            Schema::create('matchinfo',function (Blueprint $table){
+               $table->increments('id'); //自增主键ID
+                $table->integer('deskId'); //所属开桌ID
+                $table->integer('status'); //状态 1 抢庄中  2投注中  3已结束
+                $table->integer('qzScore')->nullable(); //本局抢庄积分
+                $table->integer('dealerId')->nullable(); //本局庄家ID
+                $table->timestamps();
+            });
+        }
+
+        /*
+         * 抢庄记录表
+         * */
+        if (!Schema::hasTable('matchinfo_qz')){
+            Schema::create('matchinfo_qz',function (Blueprint $table){
+                $table->increments('id'); //自增主键ID
+                $table->integer('matchId'); //所属开局ID
+                $table->integer('qzPlayerId'); //抢庄玩家ID
+                $table->integer('qzAddScore'); //抢庄添加积分
+                $table->integer('qzScore'); //抢庄底注
+                $table->timestamps();
+            });
+        }
+
+        /*
+         * 下注记录表
+         * */
+        if (!Schema::hasTable('matchinfo_bets')){
+            Schema::create('matchinfo_bets',function (Blueprint $table){
+                $table->increments('id'); //自增主键ID
+                $table->integer('matchId'); //所属局次ID
+                $table->integer('playerId'); //玩家ID
+                $table->integer('status'); //当前状态 0 待确认(默认)  1旁观  2下注
+                $table->integer('betScore'); //下注积分
+                $table->timestamps();
+            });
+        }
+
+        /*
+         * 局内发送消息通知记录表
+         * */
+        if (!Schema::hasTable('matchinfo_msg')){
+            Schema::create('matchinfo_msg',function (Blueprint $table){
+                $table->increments('id'); //自增主键ID
+                $table->integer('matchId'); //所属局次ID
+                $table->integer('playerId');// 发送消息的玩家ID
+                $table->string('content',500); //消息内容
+                $table->timestamps();
+            });
+        }
+
+        /*
+         * 投注最终结果表(开奖后记录)
+         * */
+        if (!Schema::hasTable('betresults')){
+            Schema::create('betresults',function (Blueprint $table){
+               $table->increments('id'); //自增主键ID
+                $table->integer('playerId'); //玩家ID
+                $table->integer('deskId');//所属桌次ID
+                $table->integer('matchId'); //所属局次ID
+                $table->integer('betScore');//下注积分
+                $table->integer('point'); //原始点数,开牌分数
+                $table->integer('type'); //结果类型1赢 2输 3平
+                $table->integer('rate'); //倍率
+                $table->integer('getScore'); //交易积分
+                $table->timestamps();
+            });
+        }
+
+        /*
+         * 积分明细
+         * */
+        if (!Schema::hasTable('scoredetail')){
+            Schema::create('scoredetail',function (Blueprint $table){
+                $table->increments('id'); //主键自增ID
+                $table->integer('playerId'); //玩家ID
+                $table->integer('target');//收支方向 (1收入  2支出)
+                $table->integer('sourceType'); //用途来源
+                $table->integer('sourceId'); //来源玩家ID
+                $table->integer('score'); //积分数
+                $table->string('remark',500); //备注描述
+                $table->timestamps();
+
+            });
+        }
+
+
+
+
+
+
+
+
  
 
     }

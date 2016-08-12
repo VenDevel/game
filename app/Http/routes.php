@@ -195,6 +195,26 @@ Route::group(['prefix' => 'manage', 'namespace' => 'Manage', 'middleware' => ['m
     });
 
 
+    /*
+     * 疯狂牛牛游戏的路由
+     * */
+    Route::group(['prefix'=>'games','namespace'=>'Games'],function (){
+
+        /*
+    * 疯狂牛牛游戏的路由
+    * */
+        Route::group(['prefix'=>'fknn'],function (){
+
+            Route::get('/',function (){
+                return Redirect::to('/manage/games/fknn/list');
+            });
+
+            Route::get('/list', 'FknnController@index', ['model' => 'games', 'menu' => 'fknn']);
+            Route::any('/createplayer', 'FknnController@createplayer', ['model' => 'games', 'menu' => 'fknn']);
+        });
+
+    });
+
 });
 
 
